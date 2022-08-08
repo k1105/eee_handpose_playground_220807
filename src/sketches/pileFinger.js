@@ -1,5 +1,3 @@
-import { pad4d } from "@tensorflow/tfjs";
-
 export const pileFinger = (p5, hands) => {
   // --
   // <> pinky
