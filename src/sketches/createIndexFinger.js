@@ -6,6 +6,7 @@ export const CreateIndexFinger = ({ predictionsRef }) => {
   let lost = false;
   const keyflames = [[], []];
   const positions = [];
+
   const calcAverageKeypoints = (keyarr) => {
     const keys = [];
     if (keyarr.length > 0) {
@@ -28,24 +29,29 @@ export const CreateIndexFinger = ({ predictionsRef }) => {
     }
   };
 
-  const drawIndexFingerFrom = (p5, hands, x, y) => {
+  const drawIndexFingerFrom = (p5, hands, positions) => {
     const key = hands[0];
     const base_x = key[0].x;
     const base_y = key[0].y;
 
-    p5.push();
-    p5.translate(x, y);
-    p5.ellipse(0, 0, 10);
-    for (let i = 0; i < 4; i++) {
-      //thumb
-      p5.line(
-        3 * (key[i].x - base_x),
-        3 * (key[i].y - base_y),
-        3 * (key[i + 1].x - base_x),
-        3 * (key[i + 1].y - base_y)
-      );
+    for (let k = 0; k < positions.length; k++) {
+      const x = positions[k].x;
+      const y = positions[k].y;
+
+      p5.push();
+      p5.translate(x, y);
+      p5.ellipse(0, 0, 10);
+      for (let i = 0; i < 4; i++) {
+        //thumb
+        p5.line(
+          3 * (key[i].x - base_x),
+          3 * (key[i].y - base_y),
+          3 * (key[i + 1].x - base_x),
+          3 * (key[i + 1].y - base_y)
+        );
+      }
+      p5.pop();
     }
-    p5.pop();
   };
   function sketch(p5) {
     p5.setup = () => {
@@ -71,22 +77,20 @@ export const CreateIndexFinger = ({ predictionsRef }) => {
             lost = false;
           }
           for (let index = 0; index < predictionsRef.current.length; index++) {
+            //index===0: 最初に認識された手, index===1: 次に認識された手
             keyflames[index].push(predictionsRef.current[index].keypoints);
             if (keyflames[index].length > 5) {
               keyflames[index].shift();
             }
             hands.push(calcAverageKeypoints(keyflames[index]));
           }
-          for (let i = 0; i < positions.length; i++) {
-            drawIndexFingerFrom(p5, hands, positions[i].x, positions[i].y);
-          }
+          drawIndexFingerFrom(p5, hands, positions);
         } catch (e) {}
       }
     };
 
     p5.mouseClicked = () => {
       if (new Date().getTime() - mouseClickedLastCall > 1) {
-        console.log("clicked");
         positions.push({ x: p5.mouseX, y: p5.mouseY });
       }
 
