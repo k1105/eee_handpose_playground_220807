@@ -1,8 +1,16 @@
 import { Finger } from "./FingerClass";
 
 export class NetworkedFinger extends Finger {
-  constructor(id, parent, followRotate, position, rotation, targetFinger) {
-    super(position, rotation, targetFinger);
+  constructor(
+    id,
+    parent,
+    followRotate,
+    position,
+    rotation,
+    targetFinger,
+    skin
+  ) {
+    super(position, rotation, targetFinger, skin);
     this.id = id;
     this.parent = parent;
     this.followRotate = followRotate;
@@ -36,14 +44,7 @@ export class NetworkedFinger extends Finger {
     // ゆくゆくはSkinClass.style(p5, key)関数で代替する.
     // 同時に, SkinClassにはFingerClass, NetworkedFingerClassのプロパティは含めないので、p5.translate, p5.rotateの使用も検討する.
 
-    for (let i = this.start; i < this.end; i++) {
-      p5.line(
-        key[i].x - key[this.start].x,
-        key[i].y - key[this.start].y,
-        key[i + 1].x - key[this.start].x,
-        key[i + 1].y - key[this.start].y
-      );
-    }
+    this.skin.style(p5, key, this.start, this.end);
     p5.pop();
   }
 }

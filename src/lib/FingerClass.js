@@ -1,5 +1,5 @@
 export class Finger {
-  constructor(position, offset_angle, targetFinger) {
+  constructor(position, offset_angle, targetFinger, skin) {
     this.bottom_position = position;
     this.tip_position = { x: 0, y: 0 };
     this.bottom_angle = offset_angle;
@@ -8,11 +8,7 @@ export class Finger {
     this.targetFinger = this.#convertFingerNameToInteger(targetFinger);
     this.start = 4 * this.targetFinger + 1;
     this.end = 4 * this.targetFinger + 4;
-    this.skin = {
-      drawStyle: () => {},
-      getTipPosition: () => {},
-      getAngle: () => {},
-    }; /* comming soon... */
+    this.skin = skin;
   }
   #convertFingerNameToInteger(str) {
     switch (str) {
@@ -33,12 +29,11 @@ export class Finger {
     }
   }
 
-  setBottomAngle() {}
-
   setTipPosition(key) {
     //ゆくゆくはSkinClassが定義するtipPosition()と統合する.
-    const x = key[this.end].x - key[this.start].x;
-    const y = key[this.end].y - key[this.start].y;
+    const pos = this.skin.getTipPosition(key, this.start, this.end);
+    const x = pos.x;
+    const y = pos.y;
     const theta = this.bottom_angle;
 
     this.tip_position = {
@@ -49,11 +44,6 @@ export class Finger {
 
   setVectorAngle(key) {
     //ゆくゆくはSkinClassが定義するvectorAngle()と統合する.
-    this.vector_angle =
-      Math.PI / 2 +
-      Math.atan2(
-        key[this.end].y - key[this.end - 1].y,
-        key[this.end].x - key[this.end - 1].x
-      );
+    this.vector_angle = this.skin.getVectorAngle(key, this.start, this.end);
   }
 }

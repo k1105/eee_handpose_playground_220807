@@ -1,61 +1,93 @@
 import { ReactP5Wrapper } from "react-p5-wrapper";
 import { NetworkedFinger } from "../lib/NetworkedFingerClass";
 import { calcAverageKeypoints } from "../lib/calcAverageKeypoints";
+import { Skin } from "../lib/SkinClass";
 
 export const DisplayMarkedUpFingers = ({ predictionsRef }) => {
   let mouseClickedLastCall = 0;
   const keyflames = [[], []];
   const positions = [];
+  const skin = new Skin(
+    (p5, key, start, end) => {
+      p5.stroke(255);
+      p5.strokeWeight(10);
+      for (let i = start; i < end; i++) {
+        p5.line(
+          3 * (key[i].x - key[start].x),
+          3 * (key[i].y - key[start].y),
+          3 * (key[i + 1].x - key[start].x),
+          3 * (key[i + 1].y - key[start].y)
+        );
+      }
+    },
+    (key, start, end) => {
+      return (
+        Math.PI / 2 +
+        Math.atan2(key[end].y - key[end - 1].y, key[end].x - key[end - 1].x)
+      );
+    },
+    (key, start, end) => {
+      return {
+        x: 3 * (key[end].x - key[start].x),
+        y: 3 * (key[end].y - key[start].y),
+      };
+    }
+  );
   const data = [];
   for (let i = 0; i < 5; i++) {
     data.push(
       new NetworkedFinger(
-        0,
+        i,
         null,
         false,
         { x: 500, y: 500 },
         2 * (Math.PI / 5) * i,
-        "thumb"
+        "thumb",
+        skin
       )
     );
     data.push(
       new NetworkedFinger(
-        0,
-        null,
-        false,
+        i + 1,
+        i,
+        true,
         { x: 700, y: 500 },
         2 * (Math.PI / 5) * i,
-        "index"
+        "index",
+        skin
       )
     );
     data.push(
       new NetworkedFinger(
-        0,
-        null,
-        false,
+        i + 2,
+        i + 1,
+        true,
         { x: 900, y: 500 },
         2 * (Math.PI / 5) * i,
-        "middle"
+        "middle",
+        skin
       )
     );
     data.push(
       new NetworkedFinger(
-        0,
-        null,
-        false,
+        i + 3,
+        i + 2,
+        true,
         { x: 1100, y: 500 },
         2 * (Math.PI / 5) * i,
-        "ring"
+        "ring",
+        skin
       )
     );
     data.push(
       new NetworkedFinger(
-        0,
-        null,
-        false,
+        i + 4,
+        i + 3,
+        true,
         { x: 1300, y: 500 },
         2 * (Math.PI / 5) * i,
-        "pinky"
+        "pinky",
+        skin
       )
     );
   }
