@@ -4,6 +4,8 @@ import "@tensorflow/tfjs";
 import * as handPoseDetection from "@tensorflow-models/hand-pose-detection";
 import Webcam from "react-webcam";
 import { CreateIndexFinger } from "./sketches/createIndexFinger";
+import { DisplayMarkedUpFingers } from "./sketches/DisplayMarkedUpFingers";
+import { DisplayFinger } from "./sketches/DisplayFinger";
 
 export default function App() {
   const webcamRef = useRef(null);
@@ -78,7 +80,7 @@ export default function App() {
   return (
     <>
       {/* //optional sketch */}
-      {ready && <CreateIndexFinger predictionsRef={predictionsRef} />}
+      {ready && <DisplayMarkedUpFingers predictionsRef={predictionsRef} />}
       <div
         style={{
           position: "absolute",

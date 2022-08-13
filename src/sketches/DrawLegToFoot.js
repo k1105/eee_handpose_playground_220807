@@ -35,7 +35,6 @@ export const DrawLegToFoot = ({ predictionsRef }) => {
           //leg
           p5.rotate((6.1 * p5.PI) / 6);
           pos = rigmap(origin, finger[1], 106.3);
-          console.log(pos);
           drawInterporatedEllipse(p5, origin, pos, hip_r, leg_r[0], 100);
           pos_prev = pos;
           pos = rigmap(pos_prev, finger[2], 51);

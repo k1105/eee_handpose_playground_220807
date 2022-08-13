@@ -1,4 +1,5 @@
 import { ReactP5Wrapper } from "react-p5-wrapper";
+import { Finger } from "../lib/FingerClass";
 
 export const CreateIndexFinger = ({ predictionsRef }) => {
   let lostAt = 0;
@@ -55,6 +56,7 @@ export const CreateIndexFinger = ({ predictionsRef }) => {
   };
   function sketch(p5) {
     p5.setup = () => {
+      const fin = new Finger({ x: 10, y: 10 }, p5.PI, "thumb");
       p5.createCanvas(window.innerWidth, window.innerHeight);
 
       p5.stroke(220);

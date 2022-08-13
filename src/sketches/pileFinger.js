@@ -31,7 +31,6 @@ export const pileFinger = (p5, hands) => {
     p5.translate(0, (2 * window.innerHeight) / 3);
 
     for (let n = 0; n < 5; n++) {
-      //console.log("hoge");
       if (n === 0) {
         p5.translate(window.innerWidth / 2, 0);
       } else {

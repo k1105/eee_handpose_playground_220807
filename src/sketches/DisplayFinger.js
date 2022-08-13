@@ -2,6 +2,7 @@ import { ReactP5Wrapper } from "react-p5-wrapper";
 import { spreadFinger } from "./spreadFinger";
 import { organizeFinger } from "./organizeFinger";
 import { pileFinger } from "./pileFinger";
+import { calcAverageKeypoints } from "../lib/calcAverageKeypoints";
 
 export const DisplayFinger = ({ predictionsRef }) => {
   const functions = [spreadFinger, organizeFinger, pileFinger];
@@ -9,27 +10,6 @@ export const DisplayFinger = ({ predictionsRef }) => {
   let lostAt = 0;
   let lost = false;
   const keyflames = [[], []];
-  const calcAverageKeypoints = (keyarr) => {
-    const keys = [];
-    if (keyarr.length > 0) {
-      for (let i = 0; i < 21; i++) {
-        let totalWeight = 0;
-        let val = { x: 0, y: 0 };
-        for (let j = 0; j < keyarr.length; j++) {
-          const weight =
-            (keyarr.length - 1) / 2 - Math.abs((keyarr.length - 1) / 2 - j) + 1;
-          totalWeight += weight;
-          val.x += keyarr[j][i].x * weight;
-          val.y += keyarr[j][i].y * weight;
-        }
-        keys.push({ x: val.x / totalWeight, y: val.y / totalWeight });
-      }
-
-      return keys;
-    } else {
-      return [];
-    }
-  };
   function sketch(p5) {
     p5.setup = () => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
